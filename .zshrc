@@ -10,6 +10,8 @@
 
 default_editor='sudo micro'
 zle_highlight=('paste:none')
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 
 # Path to your oh-my-zsh installation.
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -28,6 +30,8 @@ export ZSH="$HOME/.oh-my-zsh"
 export MICRO_LSP='python=pyls,go=gopls,typescript=deno lsp={"importMap":"import_map.json"},rust=rust-analyzer'
 
 DISABLE_AUTO_UPDATE="true"
+ENABLE_CORRECTION="false"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -94,9 +98,8 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions)
+plugins=(git zsh-autosuggestions zsh-shift-select)
 
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -127,33 +130,121 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-apt() { 
-  command nala "$@"
+function gitf() {
+    local url="$1"
+    local github_token="$GITHUB_TOKEN" # Optional: Set your GitHub token here if needed for private repos.
+
+    if [[ -z "$url" ]]; then
+        echo "Please provide a file or repository URL."
+        return 1
+    fi
+
+    # Check if URL points to a specific file or a repository
+    if [[ "$url" =~ /blob/ ]]; then
+        # Handle file URL
+        local api_url="${url/github.com/api.github.com/repos}"
+        api_url="${api_url/blob/raw}"
+
+        # Set up headers if a GitHub token is provided (for private repos)
+        local headers=()
+        if [[ -n "$github_token" ]]; then
+            headers=(-H "Authorization: token $github_token")
+        fi
+
+        # Fetch the file
+        curl -sSL "${headers[@]}" "$api_url" -o "$(basename "$url")"
+
+        if [[ $? -eq 0 ]]; then
+            echo "File downloaded successfully: $(basename "$url")"
+        else
+            echo "Failed to download the file."
+            return 1
+        fi
+    else
+      # Store the provided repository URL
+           REPO_URL="$1"
+           
+           # Extract the directory name from the repository URL
+           DIR_NAME=$(basename "$REPO_URL" .git)
+           
+           # Clone the repository
+           REPO_URL="${REPO_URL%/*/*/*}.git"
+           # git clone $REPO_URL
+           local last_word_no_git=${last_word%.git} 
+           cd ${last_word%.git}
+           echo $DIR_NAME
+     	  
+           
+           # Check if the clone operation was successful
+           if [ $? -ne 0 ]; then
+             echo "Failed to clone the repository."
+           fi
+           
+           # Remove everything in the current directory except the cloned repository
+           # find . -mindepth 1 -maxdepth 1 ! -name "$DIR_NAME" -exec rm -rf {} +
+           
+           # Inform the user
+           echo "Repository cloned and other files removed."
+           
+    fi
 }
-sudo() {
+
+
+apt() {
+  command sudo nala "$@"
+}
+
+function sudo() {
   if [ "$1" = "apt" ]; then
     shift
     command sudo nala "$@"
+  elif  [ "$1" = "nano" ]; then
+    shift
+    command sudo micro "$@"
   else
     command sudo "$@"
   fi
 }
+alias sudo="sudo"
 
+sc() {
+  command sudo $(fc -ln -1)
+}
+
+function history_with_timestamps() {
+  awk -F';' '{
+    if ($1 ~ /^: [0-9]+:/) {
+      split($1, a, ": ")
+      timestamp = a[2]
+      command = $2
+      formatted_time = strftime("%m-%d %H:%M", timestamp)  # Exclude seconds
+      printf("%s  %s\n", formatted_time, command)
+    } else {
+      print $0
+    }
+  }' ~/.zsh_history
+}
+
+
+alias cpb="cp -t ~/Backup/ -v"
+alias history=history_with_timestamps
 alias update="sudo nala update && sudo nala upgrade -y"
 alias fm="mc"
 alias py="python3"
 alias python="python3"
 alias ws="cd ~/Programs"
-alias nano=micro
+alias nano="micro"
 alias dk=docker
 alias ls=lsd
-alias m=micro
+alias ll="lsd -la"
+alias m="micro"
 alias shutdown="wsl.exe --shutdown"
-alias load=" source ~/.zshrc"
+alias reload="source ~/.zshrc"
 alias top=htop
 alias chrome.exe="/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe"
 alias open=wslview
 alias ..="cd .."
+
 
 export DISPLAY=:0.0
 
@@ -161,12 +252,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export GROQ_API_KEY=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
+
+
 alias ai="/home/shafayet/automations/ai_cli.py --service groq"
 
 plugins=(git zsh-syntax-highlighting)
-source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 
 # HSTR configuration - add this to ~/.zshrc
 alias h=hstr                    # hh to be alias for hstr
@@ -179,12 +269,12 @@ export HSTR_CONFIG="hicolor,raw-history-view"
 export EDITOR=micro
 export VISUAL=micro
 
-if grep -q "microsoft" /proc/version > /dev/null 2>&1; then
-    if service docker status 2>&1 | grep -q "is not running"; then
-        wsl.exe --distribution "${WSL_DISTRO_NAME}" --user root \
-            --exec /usr/sbin/service docker start > /dev/null 2>&1
-    fi
-fi
+# if grep -q "microsoft" /proc/version > /dev/null 2>&1; then
+    # if service docker status 2>&1 | grep -q "is not running"; then
+        # wsl.exe --distribution "${WSL_DISTRO_NAME}" --user root \
+            # --exec /usr/sbin/service docker start > /dev/null 2>&1
+    # fi
+# fi
 
 
 # Basic auto/tab complete:
@@ -193,34 +283,37 @@ zstyle ':completion:*' menu select
 zmodload zsh/complist
 _comp_options+=(globdots)
 
+bindkey -r '^[S'
 
-function gitf() {
-   local file_url="$1"
-   local github_token="$GITHUB_TOKEN" # Optional: Set your GitHub token here if needed for private repos.
- 
-   if [[ -z "$file_url" ]]; then
-     echo "Please provide a file URL."
-     return 1
-   fi
- 
-   # Extract the necessary parts from the URL
-   local api_url="${file_url/github.com/api.github.com/repos}"
-   api_url="${api_url/blob/raw}"
- 
-   # Set up headers if a GitHub token is provided (for private repos)
-   local headers=()
-   if [[ -n "$github_token" ]]; then
-     headers=(-H "Authorization: token $github_token")
-   fi
- 
-   # Fetch the file
-   curl -sSL "${headers[@]}" "$api_url" -o "$(basename "$file_url")"
- 
-   # Check if the file was downloaded
-   if [[ $? -eq 0 ]]; then
-     echo "File downloaded successfully: $(basename "$file_url")"
-   else
-     echo "Failed to download the file."
-     return 1
-   fi
+
+function set-env() {
+    local var_name=$1
+    local var_value=$2
+    local file_env="$HOME/.env.zsh"  # Correct assignment
+
+    # Ensure the .env.zsh file exists
+    if [ ! -f "$file_env" ]; then
+        touch "$file_env"
+        echo "Created $file_env"
+    fi
+
+    # Add or update the export statement in .env.zsh
+    if grep -q "^export $var_name=" "$file_env"; then
+        sed -i '' "s|^export $var_name=.*|export $var_name=\"$var_value\"|" "$file_env"
+        echo "Updated: export $var_name=\"$var_value\" in .env.zsh"
+    else
+        echo "export $var_name=\"$var_value\"" >> "$file_env"
+        echo "Added: export $var_name=\"$var_value\" to .env.zsh"
+    fi
+
+    # Reload the .env.zsh file to apply changes
+    source "$file_env"
+    echo "Environment variable '$var_name' is now permanently set."
 }
+
+
+source ~/.env.zsh
+
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+export PATH=$PATH:/home/shafayet/.local/bin
