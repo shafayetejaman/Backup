@@ -1,0 +1,25 @@
+[user]
+	name = shafayetejaman
+	email = shafayetejaman@gmail.com
+[color]
+	ui = auto
+[http]
+	postBuffer = 157286400
+	version = HTTP/1.1
+[pack]
+	threads = 1
+[core]
+	autocrlf = false
+	filemode = false
+	editor = code --wait
+	pager = 
+[init]
+	defaultBranch = main
+
+
+
+ git config --global init.defaultBranch main
+ git config --global core.editor "code --wait"
+ git config --global user.email shafayetejaman@gmail.com
+ git config --global user.name shafayetejaman
+ git config --global core.pager ""
