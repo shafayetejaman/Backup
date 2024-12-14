@@ -30,6 +30,9 @@ export ZSH="$HOME/.oh-my-zsh"
 export MICRO_LSP='python=pyls,go=gopls,typescript=deno lsp={"importMap":"import_map.json"},rust=rust-analyzer'
 
 DISABLE_AUTO_UPDATE="true"
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
 ENABLE_CORRECTION="false"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -139,11 +142,10 @@ function gitf() {
         return 1
     fi
 
-    # Check if URL points to a specific file or a repository
-    if [[ "$url" =~ /blob/ ]]; then
-        # Handle file URL
-        local api_url="${url/github.com/api.github.com/repos}"
-        api_url="${api_url/blob/raw}"
+    # Check if the URL is for a file (contains "blob/")
+    if [[ "$url" == *"blob/"* ]]; then
+        # Transform the GitHub file URL to the raw content URL
+        local raw_url="${url/blob/raw}"
 
         # Set up headers if a GitHub token is provided (for private repos)
         local headers=()
@@ -151,43 +153,26 @@ function gitf() {
             headers=(-H "Authorization: token $github_token")
         fi
 
-        # Fetch the file
-        curl -sSL "${headers[@]}" "$api_url" -o "$(basename "$url")"
+        # Fetch the file using curl
+        curl -sSL "${headers[@]}" "$raw_url" -o "$(basename "$raw_url")"
 
         if [[ $? -eq 0 ]]; then
-            echo "File downloaded successfully: $(basename "$url")"
+            echo "File downloaded successfully: $(basename "$raw_url")"
         else
             echo "Failed to download the file."
             return 1
         fi
     else
-      # Store the provided repository URL
-           REPO_URL="$1"
-           
-           # Extract the directory name from the repository URL
-           DIR_NAME=$(basename "$REPO_URL" .git)
-           
-           # Clone the repository
-           REPO_URL="${REPO_URL%/*/*/*}.git"
-           # git clone $REPO_URL
-           local last_word_no_git=${last_word%.git} 
-           cd ${last_word%.git}
-           echo $DIR_NAME
-     	  
-           
-           # Check if the clone operation was successful
-           if [ $? -ne 0 ]; then
-             echo "Failed to clone the repository."
-           fi
-           
-           # Remove everything in the current directory except the cloned repository
-           # find . -mindepth 1 -maxdepth 1 ! -name "$DIR_NAME" -exec rm -rf {} +
-           
-           # Inform the user
-           echo "Repository cloned and other files removed."
-           
+        # Handle repository URL
+        if [[ "$url" == *".git" ]]; then
+            git clone "$url"
+        else
+            echo "Invalid URL. Please provide a valid file or repository URL."
+            return 1
+        fi
     fi
 }
+
 
 
 apt() {
@@ -230,8 +215,8 @@ alias cpb="cp -t ~/Backup/ -v"
 alias history=history_with_timestamps
 alias update="sudo nala update && sudo nala upgrade -y"
 alias fm="mc"
-alias py="python3"
-alias python="python3"
+alias py="python3.13"
+alias python="python3.13"
 alias ws="cd ~/Programs"
 alias nano="micro"
 alias dk=docker
@@ -313,7 +298,7 @@ function set-env() {
 
 
 source ~/.env.zsh
-
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 export PATH=$PATH:/home/shafayet/.local/bin
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /home/shafayet/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
