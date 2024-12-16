@@ -1,3 +1,4 @@
+# This is Git's per-user configuration file.
 [user]
 	name = shafayetejaman
 	email = shafayetejaman@gmail.com
@@ -15,11 +16,11 @@
 	pager = 
 [init]
 	defaultBranch = main
-
-
-
- git config --global init.defaultBranch main
- git config --global core.editor "code --wait"
- git config --global user.email shafayetejaman@gmail.com
- git config --global user.name shafayetejaman
- git config --global core.pager ""
+[diff]
+    tool = default-difftool
+[difftool "default-difftool"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+    tool = code
+[mergetool "code"]
+    cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
