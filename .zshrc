@@ -12,6 +12,8 @@ default_editor='sudo micro'
 zle_highlight=('paste:none')
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+bindkey '\e[3;5~' kill-word
+bindkey '^H' backward-kill-word
 
 # Path to your oh-my-zsh installation.
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -229,7 +231,8 @@ alias top=htop
 alias chrome.exe="/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe"
 alias open=wslview
 alias ..="cd .."
-
+alias pi="sudo nala install"
+alias rm="trash -fv"
 
 export DISPLAY=:0.0
 
@@ -302,3 +305,8 @@ export PATH=$PATH:/home/shafayet/.local/bin
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /home/shafayet/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.local/share/zsh/plugins/zsh-shift-select/zsh-shift-select.plugin.zsh
+export PATH="$PATH:$HOME/.local/bin"
+
+eval "$(zoxide init zsh)"
+eval $(thefuck --alias fk)
