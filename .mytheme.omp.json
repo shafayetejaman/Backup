@@ -31,18 +31,30 @@
             "style": "full",
             "trailing_diamond": "\ue0c6"
           },
-          "template": " \uf2c0 {{ .UserName }} ",
+          "template": " \uf2c0 {{ .UserName }} \ue0b1",
           "foreground": "#fb7e14",
           "background": "#494949",
           "type": "path",
           "style": "diamond"
         },
-         {
+        {
+          "properties": {
+            "cache_duration": "none",
+            "style": "full",
+            "trailing_diamond": "\ue0c6"
+          },
+          "template": " {{if eq .Folder .UserName }}\uf015{{else}}\uf07c {{ .Folder }}{{end}} ",
+          "foreground": "#fb7e14",
+          "background": "#494949",
+          "type": "path",
+          "style": "diamond"
+        },
+        {
           "properties": {
             "always_enabled": false,
             "cache_duration": "none",
             "style": "round",
-            "threshold": 5000
+            "threshold": 8000
           },
           "template": "\ue0b1 {{ .FormattedMs }} ",
           "foreground": "#fb7e14",
