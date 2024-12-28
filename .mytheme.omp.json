@@ -38,15 +38,16 @@
           "style": "diamond"
         },
         {
+          "type": "path",
           "properties": {
             "cache_duration": "none",
-            "style": "full",
+            "mixed_threshold": 8,
+            "style": "mixed",
             "trailing_diamond": "\ue0c6"
           },
           "template": " {{if eq .Folder .UserName }}\uf015{{else}}\uf07c {{ .Path }}{{end}} ",
           "foreground": "#fb7e14",
           "background": "#494949",
-          "type": "path",
           "style": "diamond"
         },
         {
