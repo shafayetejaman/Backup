@@ -43,7 +43,7 @@
             "style": "full",
             "trailing_diamond": "\ue0c6"
           },
-          "template": " {{if eq .Folder .UserName }}\uf015{{else}}\uf07c {{ .Folder }}{{end}} ",
+          "template": " {{if eq .Folder .UserName }}\uf015{{else}}\uf07c {{ .Path }}{{end}} ",
           "foreground": "#fb7e14",
           "background": "#494949",
           "type": "path",
