@@ -6,6 +6,35 @@
 # https://www.nushell.sh/book/coloring_and_theming.html
 # And here is the theme collection
 # https://github.com/nushell/nu_scripts/tree/main/themes
+
+alias cpb = cp $in ~/Backup/ -v
+alias update = sudo nala update | and sudo nala upgrade -y
+alias fm = mc
+alias py = python3.13
+alias python = python3.13
+alias ws = cd ~/Programs
+alias nano = micro
+alias dk = docker
+alias ls = eza --icons=always
+alias lst = eza -T --icons=always
+alias ll = eza -l --icons=always
+alias llt = eza -l -T --icons=always
+alias m = micro
+alias shutdown = wsl.exe --shutdown
+alias top = htop
+alias chrome.exe = `/mnt/c/Program Files/Google/Chrome/Application/chrome.exe`
+alias open = wslview
+alias .. = cd ..
+alias ni = sudo nala install
+alias bi = brew install
+alias fzf = fzf --preview "bat --color=always {}"
+alias fzc = code "$(fzf --preview 'bat --color=always {}')"
+alias fzm = micro "$(fzf --preview 'bat --color=always {}')"
+alias cd = z
+alias cat = bat
+alias dw = cd /mnt/f/Downloads
+
+
 let dark_theme = {
     # color for nushell primitives
     separator: white
