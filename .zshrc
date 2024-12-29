@@ -10,7 +10,7 @@ bindkey '\e[3;5~' kill-word
 bindkey '^H' backward-kill-word
 bindkey '^[^?' kill-whole-line
 bindkey '^u' clear-screen
-
+export TERM="xterm-256color"
 clear-all-input() {
     zle clear-screen
     BUFFER=""
@@ -140,6 +140,7 @@ alias fzm='micro "$(fzf --preview="bat --color=always {}")"'
 alias cd=z
 alias cat=bat
 alias dw="cd /mnt/f/Downloads"
+alias c=code
 
 export DISPLAY=:0.0
 
@@ -198,9 +199,20 @@ export PATH="$PATH:$HOME/.local/bin"
 
 eval "$(zoxide init zsh)"
 eval $(thefuck --alias fk)
-command_not_found_handler() { fk }
+# command_not_found_handler() { fk }
 
 if [[ -z "$TMUX" ]]; then
-    tmux
+    tmux 
 fi
 
+clear() {
+    # Disable Oh My Posh by unsetting the prompt
+    unset PROMPT_COMMAND
+    eval "$(oh-my-posh init zsh --clean)" # Clean option disables the prompt
+
+    # Run the clear command
+    command clear
+
+    # Re-enable Oh My Posh
+    eval "$(oh-my-posh init zsh)"
+}
