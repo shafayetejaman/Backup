@@ -201,18 +201,19 @@ eval "$(zoxide init zsh)"
 eval $(thefuck --alias fk)
 # command_not_found_handler() { fk }
 
-if [[ -z "$TMUX" ]]; then
-    tmux 
+if [[ "$TERM_PROGRAM" != "vscode" ]] && [ -z "$TMUX" ]; then
+  	tmux attach-session || tmux new-session
+  elif [ -z "$TMUX" ]; then
+  	tmux new-session
 fi
+
 
 clear() {
     # Disable Oh My Posh by unsetting the prompt
     unset PROMPT_COMMAND
     eval "$(oh-my-posh init zsh --clean)" # Clean option disables the prompt
-
     # Run the clear command
     command clear
-
     # Re-enable Oh My Posh
     eval "$(oh-my-posh init zsh)"
 }
