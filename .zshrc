@@ -151,20 +151,14 @@ export NVM_DIR="$HOME/.nvm"
 alias ai="python3.12 /home/shafayet/automations/ai_cli.py --service groq"
 
 plugins=(git zsh-syntax-highlighting)
-
-alias h=hstr                    
-setopt histignorespace           
-bindkey -s "\C-r" "\C-a hstr -- \C-j"     
+                        
 export HISTFILE=~/.zsh_history
-export HSTR_CONFIG="hicolor,raw-history-view"
-
 export EDITOR=micro
 export VISUAL=micro
 
-autoload -U compinit && compinit
-zstyle ':completion:*' menu select
-zmodload zsh/complist
-_comp_options+=(globdots)
+# auto complete
+autoload -U compinit; compinit
+source ~/somewhere/fzf-tab.plugin.zsh
 
 function set-env() {
     local var_name=$1
@@ -217,3 +211,16 @@ clear() {
     # Re-enable Oh My Posh
     eval "$(oh-my-posh init zsh)"
 }
+
+exit() {
+  if [ -n "$TMUX" ]; then
+    tmux kill-session
+  fi
+  builtin exit
+}
+
+
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
