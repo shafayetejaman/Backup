@@ -15,7 +15,7 @@ alias python = python3.13
 alias ws = cd ~/Programs
 alias nano = micro
 alias dk = docker
-alias ls = eza --icons=always
+# alias ls = eza --icons=always
 alias lst = eza -T --icons=always
 alias ll = eza -l --icons=always
 alias llt = eza -l -T --icons=always
@@ -23,17 +23,30 @@ alias m = micro
 alias shutdown = wsl.exe --shutdown
 alias top = htop
 alias chrome.exe = `/mnt/c/Program Files/Google/Chrome/Application/chrome.exe`
-alias open = wslview
 alias .. = cd ..
 alias ni = sudo nala install
 alias bi = brew install
 alias fzf = fzf --preview "bat --color=always {}"
 alias fzc = code "$(fzf --preview 'bat --color=always {}')"
 alias fzm = micro "$(fzf --preview 'bat --color=always {}')"
-alias cd = z
 alias cat = bat
 alias dw = cd /mnt/f/Downloads
 
+use std "path add"
+path add "/home/linuxbrew/.linuxbrew/bin"
+
+# Environment variables
+$env.MICRO_LSP = "python=pyls,go=gopls,typescript=deno lsp={\"importMap\":\"import_map.json\"},rust=rust-analyzer"
+$env.HOMEBREW_NO_ENV_HINTS = "1"
+
+# Custom alias for apt using nala
+def apt [...args] {
+    sudo nala ...$args
+}
+
+
+# For atuin 
+source ~/.local/share/atuin/init.nu
 
 let dark_theme = {
     # color for nushell primitives
