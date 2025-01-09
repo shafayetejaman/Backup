@@ -1,0 +1,13 @@
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab .tab-label a,
+.monaco-workbench .part.editor > .content .editor-group-container > .title .title-label a {
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+.monaco-workbench .part > .content {
+    font-size: 13.1px;
+    letter-spacing: 0.4px;
+
+}
+
+{ normal: 35, compact: 25 };
