@@ -40,7 +40,7 @@ HISTSIZE=1000
 SAVEHIST=1000
 ENABLE_CORRECTION="false"
 
-plugins=(git zsh-autosuggestions zsh-shift-select)
+plugins=(git zsh-autosuggestions zsh-shift-select zsh-syntax-highlighting)
 
 function gitf() {
     local url="$1"
@@ -149,15 +149,19 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
 
 alias ai="python3.12 /home/shafayet/automations/ai_cli.py --service groq"
-
-plugins=(git zsh-syntax-highlighting)
                         
 export HISTFILE=~/.zsh_history
 export EDITOR=micro
 export VISUAL=micro
 
 # auto complete
-autoload -U compinit; compinit
+# autoload -U compinit; compinit
+autoload -Uz +X compinit && compinit
+
+## case insensitive path-completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' menu select
+
 source ~/somewhere/fzf-tab.plugin.zsh
 
 function set-env() {
@@ -197,10 +201,7 @@ eval $(thefuck --alias fk)
 
 if [[ "$TERM_PROGRAM" != "vscode" ]] && [ -z "$TMUX" ]; then
   	tmux attach-session || tmux new-session
-  elif [ -z "$TMUX" ]; then
-  	tmux new-session
 fi
-
 
 clear() {
     # Disable Oh My Posh by unsetting the prompt
@@ -214,7 +215,7 @@ clear() {
 
 exit() {
   if [ -n "$TMUX" ]; then
-    tmux kill-session
+    tmux kill-session 
   fi
   builtin exit
 }
