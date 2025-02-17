@@ -10,4 +10,4 @@
 
 }
 
-{ normal: 35, compact: 26 };
+{ normal: 35, compact: 25 };
