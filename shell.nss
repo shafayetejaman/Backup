@@ -2,7 +2,7 @@
 {
 	priority=1
 	exclude.where = !process.is_explorer
-	showdelay = 200
+	showdelay = 150
 	// Options to allow modification of system items
 	modify.remove.duplicate=1
 	tip.enabled=true
@@ -20,7 +20,6 @@ menu(mode="multiple" title="Pin/Unpin" image=icon.pin)
 menu(mode="multiple" title=title.more_options image=icon.more_options)
 {
 }
-
 
 theme
 {
@@ -40,7 +39,9 @@ remove(find="Scan with Microsoft Defender")
 remove(find="TeraCopy")
 remove(find="New folder with selection")
 remove(find="Add to Favorites")
-
+remove(find="Edit Picture")
+remove(find="Picture to PDF")
+remove(find="Extract Text")
 
 
 import 'imports/terminal.nss'
