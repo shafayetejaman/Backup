@@ -25,7 +25,7 @@ export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin/oh-my-posh
 
 zstyle ':vcs_info:*' enable false
 function precmd() {
-   if [[ -z $OH_MY_POSH_LOADED ]]; then
+   if [[ -z $OH_MY_POSH_LOADED ]] && [[ "$TERM_PROGRAM" != "WarpTerminal" ]]; then
       eval "$(oh-my-posh init zsh --config ~/.mytheme.omp.json)"
       OH_MY_POSH_LOADED=1
    fi
@@ -113,7 +113,7 @@ function history_with_timestamps() {
 
 alias cpb="cp -t ~/Backup/ -v"
 alias history=history_with_timestamps
-alias update="sudo nala update && sudo nala upgrade -y"
+alias update="sudo nala update && sudo nala upgrade --full -y"
 alias fm="mc"
 alias py="python3.13"
 alias python="python3.13"
@@ -199,19 +199,21 @@ eval "$(zoxide init zsh)"
 eval $(thefuck --alias fk)
 # command_not_found_handler() { fk }
 
-if [[ "$TERM_PROGRAM" != "vscode" ]] && [ -z "$TMUX" ]; then
-  	tmux attach-session || tmux new-session
+if [[ "$TERM_PROGRAM" != "vscode" ]] && [[ "$TERM_PROGRAM" != "WarpTerminal" ]] && [ -z "$TMUX" ]; then
+    tmux attach-session || tmux new-session
 fi
 
-clear() {
-    # Disable Oh My Posh by unsetting the prompt
-    unset PROMPT_COMMAND
-    eval "$(oh-my-posh init zsh --clean)" # Clean option disables the prompt
-    # Run the clear command
-    command clear
-    # Re-enable Oh My Posh
-    eval "$(oh-my-posh init zsh)"
-}
+if [[ "$TERM_PROGRAM" != "WarpTerminal" ]] ; then
+    clear() {
+        # Disable Oh My Posh by unsetting the prompt
+        unset PROMPT_COMMAND
+        eval "$(oh-my-posh init zsh --clean)" # Clean option disables the prompt
+        # Run the clear command
+        command clear
+        # Re-enable Oh My Posh
+        eval "$(oh-my-posh init zsh)"
+    }
+fi
 
 exit() {
   if [ -n "$TMUX" ]; then
