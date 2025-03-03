@@ -2,5 +2,11 @@
     "Alt-/": "lua:comment.comment",
     "CtrlUnderscore": "lua:comment.comment",
     "Alt-s": "Save,Quit",
-    "Ctrl-u": "Suspend"
+    "Ctrl-u": "Suspend",
+    "Alt-Down": "DuplicateLine",
+    "Alt-Up": "DuplicateLine",
+    "Alt-Backspace": "DeleteLine",
+    "Ctrl-Backspace": "DeleteWordLeft",
+    "CtrlShiftUp": "CursorPageUp",
+    "CtrlShiftDown": "CursorPageDown",
 }
