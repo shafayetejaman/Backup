@@ -1,9 +1,10 @@
 [wsl2]
 memory=5GB
-processors=4
+processors=3
 swap=6GB
 swapFile=F:\\wsl2-swap.vhdx
 kernelCommandLine=ipv6.disable=1
 defaultVhdSize=30GB
 guiApplications=true
+
 
