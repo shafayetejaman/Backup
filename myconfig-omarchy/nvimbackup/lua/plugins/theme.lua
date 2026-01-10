@@ -1,0 +1,1 @@
+/home/shafayet/.config/omarchy/current/theme/neovim.lua
