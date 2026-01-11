@@ -1,0 +1,68 @@
+─────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     │ File: [1m.zshrc[0m
+─────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1 │ [32m#[0m[32m If not running interactively, don't do anything[0m
+   2 │ [36m[[[0m $- [35m!=[0m [35m*[0mi[35m*[0m [36m]][0m [35m&&[0m [35mreturn[0m
+   3 │ 
+   4 │ [36m.[0m [32m"[0m[32m$[0m[32mHOME[0m[32m/.local/share/../bin/env[0m[32m"[0m
+   5 │ [32m#[0m[32m Load omarchy-zsh configuration[0m
+   6 │ [35mif[0m [36m[[[0m [36m-[0m[36md[0m /usr/share/omarchy-zsh/conf.d [36m]][0m[35m;[0m [35mthen[0m
+   7 │   [35mfor[0m config [35min[0m /usr/share/omarchy-zsh/conf.d/[35m*[0m.zsh[35m;[0m [35mdo[0m
+   8 │     [36m[[[0m [36m-[0m[36mf[0m [32m"[0m[32m$[0m[32mconfig[0m[32m"[0m [36m]][0m [35m&&[0m [36msource[0m [32m"[0m[32m$[0m[32mconfig[0m[32m"[0m
+   9 │   [35mdone[0m
+  10 │ [35mfi[0m
+  11 │ 
+  12 │ [32m#[0m[32m Load omarchy-zsh functions and aliases[0m
+  13 │ [35mif[0m [36m[[[0m [36m-[0m[36md[0m /usr/share/omarchy-zsh/functions [36m]][0m[35m;[0m [35mthen[0m
+  14 │   [35mfor[0m func [35min[0m /usr/share/omarchy-zsh/functions/[35m*[0m.zsh[35m;[0m [35mdo[0m
+  15 │     [36m[[[0m [36m-[0m[36mf[0m [32m"[0m[32m$[0m[32mfunc[0m[32m"[0m [36m]][0m [35m&&[0m [36msource[0m [32m"[0m[32m$[0m[32mfunc[0m[32m"[0m
+  16 │   [35mdone[0m
+  17 │ [35mfi[0m
+  18 │ 
+  19 │ [32m#[0m[32m Add your own customizations below[0m
+  20 │ 
+  21 │ [32m#[0m[32m GTK (GNOME, apps using GTK)[0m
+  22 │ [35mexport[0m GDK_SCALE[35m=[0m[32m2[0m
+  23 │ [35mexport[0m GDK_DPI_SCALE[35m=[0m[32m0.5[0m
+  24 │ 
+  25 │ [32m#[0m[32m Qt (KDE, Qt apps)[0m
+  26 │ [35mexport[0m QT_AUTO_SCREEN_SCALE_FACTOR[35m=[0m[32m1[0m
+  27 │ [35mexport[0m QT_SCALE_FACTOR[35m=[0m[32m2[0m
+  28 │ [35mexport[0m QT_FONT_DPI[35m=[0m[32m192[0m
+  29 │ 
+  30 │ [32m#[0m[32m Cursor scaling[0m
+  31 │ [35mexport[0m XCURSOR_SIZE[35m=[0m[32m48[0m
+  32 │ 
+  33 │ [32m#[0m[32m Firefox (Wayland)[0m
+  34 │ [35mexport[0m MOZ_ENABLE_WAYLAND[35m=[0m[32m1[0m
+  35 │ 
+  36 │ [36msource[0m ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+  37 │ bindkey [32m'[0m[32m^N[0m[32m'[0m autosuggest-accept
+  38 │ autoload[36m -[0m[36mU[0m compinit[35m;[0m compinit
+  39 │ [36msource[0m ~/somewhere/fzf-tab.plugin.zsh
+  40 │ [36msource[0m /home/shafayet/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  41 │ [36meval[0m $(thefuck[36m --[0m[36malias[0m fk)
+  42 │ 
+  43 │ [36malias[0m [34mreload[0m[35m=[0m[32m"[0m[32msource .zshrc[0m[32m"[0m
+  44 │ [36malias[0m [34mvi[0m[35m=[0m[32m"[0m[32mnvim[0m[32m"[0m
+  45 │ [36malias[0m [34mvim[0m[35m=[0m[32m"[0m[32mnvim[0m[32m"[0m
+  46 │ [36malias[0m [34mnano[0m[35m=[0m[32m"[0m[32mnvim[0m[32m"[0m
+  47 │ [36malias[0m [34mrm[0m[35m=[0m[32m"[0m[32mtrash-put[0m[32m"[0m
+  48 │ [36malias[0m [34mpy[0m[35m=[0m[32m"[0m[32mpython3.13[0m[32m"[0m
+  49 │ [36malias[0m [34mpython[0m[35m=[0m[32m"[0m[32mpython3.13[0m[32m"[0m
+  50 │ [36malias[0m [34mcat[0m[35m=[0m[32mbat[0m
+  51 │ [36malias[0m [34mgw[0m[35m=[0m[32m"[0m[32m/home/shafayet/Work[0m[32m"[0m
+  52 │ [36malias[0m [34msudo[0m[35m=[0m[32m'[0m[32msudo [0m[32m'[0m
+  53 │ 
+  54 │ [34mfs[0m() {
+  55 │     [36meval[0m [32m"[0m[32msudo [0m[32m$[0m[32m([0m[32mfc[0m[36m -[0m[36mln[0m[36m -[0m[36m1[0m[32m)[0m[32m"[0m
+  56 │ }
+  57 │ 
+  58 │ [32m#[0m[32m Check that the function `starship_zle-keymap-select()` is defined.[0m
+  59 │ [32m#[0m[32m xref: https://github.com/starship/starship/issues/3418[0m
+  60 │ [36mtype[0m starship_zle-keymap-select [35m>[0m/dev/null [35m||[0m \
+  61 │   {
+  62 │     [36mecho[0m [32m"[0m[32mLoad starship[0m[32m"[0m
+  63 │     [36meval[0m [32m"[0m[32m$[0m[32m([0m[32m/usr/local/bin/starship[0m[32m init zsh[0m[32m)[0m[32m"[0m
+  64 │   }
+─────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────
