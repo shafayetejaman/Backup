@@ -6,7 +6,7 @@
   "spacing": 0,
   "height": 20,
   "modules-left": ["custom/omarchy", "hyprland/workspaces"],
-  "modules-center": ["custom/date","custom/time", "custom/update", "custom/voxtype", "custom/screenrecording-indicator"],
+  "modules-center": ["custom/date","custom/time", "custom/update", "custom/voxtype", "custom/screenrecording-indicator", "custom/usb"],
   "modules-right": [
     "group/tray-expander",
     "bluetooth",
@@ -70,23 +70,30 @@
     "interval": 5,
     "format": "{percentage}%  ",
     "on-click": "omarchy-launch-or-focus-tui btop -p 2",
-    "tooltip": true
+    "tooltip-format": "Used: {used} / {total}"
   },
 
+  "custom/date": {
+    "exec": "date '+%a %d %b'",
+    "interval": 60,
+    "format": " {}",
+    "on-click": "gsimplecal --close-on-unfocus"
+  },
 
-"custom/date": {
-  "exec": "date '+%a %d %b'",
-  "interval": 60,
-  "format": " {}",
-  "on-click": "gsimplecal --close-on-unfocus"
-},
+  "custom/time": {
+    "exec": "date '+%I:%M %p'",
+    "interval": 30,
+    "format": "  {}",
+    "on-click": "gsimplecal --close-on-unfocus"
+  },
 
-"custom/time": {
-  "exec": "date '+%I:%M %p'",
-  "interval": 30,
-  "format": "  {}",
-  "on-click": "gsimplecal --close-on-unfocus"
-},
+  "custom/usb": {
+      "format": " {}",
+      "exec": "~/.config/waybar/scripts/usb-waybar.sh",
+      "interval": 4,
+      "on-click": "~/.config/waybar/scripts/eject-usb.sh",
+      "tooltip-format": "Eject"
+  },
 
   "network": {
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
